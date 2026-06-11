@@ -113,6 +113,7 @@ export default function InventoryManagementPage() {
   const [showImport, setShowImport] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
   const [editingItem, setEditingItem] = useState<any>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     if (actionData?.ok) {
@@ -134,16 +135,28 @@ export default function InventoryManagementPage() {
     }
   }, [actionData]);
 
+  const filteredItems = items.filter((item) => {
+    if (!searchQuery) return true;
+    const lowerQuery = searchQuery.toLowerCase();
+    return (
+      item.name.toLowerCase().includes(lowerQuery) ||
+      item.sku.toLowerCase().includes(lowerQuery) ||
+      item.brand.toLowerCase().includes(lowerQuery)
+    );
+  });
+
   return (
     <div className={styles.page}>
       <InventoryHeader
         onAddItem={() => setShowAddItem(true)}
         onImport={() => setShowImport(true)}
+        searchQuery={searchQuery}
+        onSearch={setSearchQuery}
       />
       {selected.length > 0 && (
         <BulkActionsBar count={selected.length} onClear={() => setSelected([])} selectedIds={selected} items={items} />
       )}
-      <InventoryTable selected={selected} onSelectChange={setSelected} items={items} onEdit={setEditingItem} />
+      <InventoryTable selected={selected} onSelectChange={setSelected} items={filteredItems} onEdit={setEditingItem} />
       {showAddItem && <AddItemModal onClose={() => setShowAddItem(false)} />}
       {editingItem && <AddItemModal item={editingItem} onClose={() => setEditingItem(null)} />}
       {showImport && <ImportExcelModal onClose={() => setShowImport(false)} />}
