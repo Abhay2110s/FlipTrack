@@ -139,9 +139,9 @@ export default function InventoryManagementPage() {
     if (!searchQuery) return true;
     const lowerQuery = searchQuery.toLowerCase();
     return (
-      item.name.toLowerCase().includes(lowerQuery) ||
-      item.sku.toLowerCase().includes(lowerQuery) ||
-      item.brand.toLowerCase().includes(lowerQuery)
+      (item.name?.toLowerCase() || "").includes(lowerQuery) ||
+      (item.sku?.toLowerCase() || "").includes(lowerQuery) ||
+      (item.brand?.toLowerCase() || "").includes(lowerQuery)
     );
   });
 
