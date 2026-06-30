@@ -13,6 +13,10 @@
   <p>
     An open-source SaaS platform designed specifically for sneaker, streetwear, and collectibles resellers to manage their inventory, track market prices, and analyze their business using AI. Built for the <strong>Open Source Hackathon by Elite Coders</strong>.
   </p>
+  
+  <p>
+    ⭐ <strong>If you find FlipTrack useful or are participating in the hackathon, please consider giving this repository a star! It helps our open-source community grow.</strong> ⭐
+  </p>
 </div>
 
 <br />

@@ -4,7 +4,7 @@ First off — **thank you** for considering contributing to FlipTrack! Every bug
 
 > **Please read our [Code of Conduct](CODE_OF_CONDUCT.md) before contributing. We take community standards seriously.**
 
----
+> ⭐ **Show your support!** Before you get started, please consider giving the repository a star. It helps the project grow and increases visibility for all contributors.
 
 ## 📖 Table of Contents
 
