@@ -5,8 +5,10 @@ interface Props {
   className?: string;
 }
 
+// FIXED: Added optional intent to interface to safely prevent form message leaks
 interface ActionData {
   ok: boolean;
+  intent?: string;
   message?: string;
   error?: string;
 }
@@ -41,13 +43,15 @@ export function SecuritySection({ className }: Props) {
 
         <h3 className={styles.subTitle}>Change Password</h3>
 
-        {actionData?.error && (
+        {/* FIXED: Form only displays errors meant specifically for change-password */}
+        {actionData?.intent === "change-password" && actionData?.error && (
           <div className={styles.errorMessage} role="alert">
             {actionData.error}
           </div>
         )}
 
-        {actionData?.ok && actionData?.message && (
+        {/* FIXED: Form only displays success messages meant specifically for change-password */}
+        {actionData?.intent === "change-password" && actionData?.ok && actionData?.message && (
           <div className={styles.successMessage} role="status">
             {actionData.message}
           </div>

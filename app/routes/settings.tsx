@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useLoaderData } from "react-router";
 import type { Route } from "./+types/settings";
 import { getSupabaseServerClient } from "~/utils/supabase.server";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Currency, Theme } from "@prisma/client";
 import styles from "./settings.module.css";
 import { SettingsNavigation } from "~/blocks/settings/settings-navigation";
 import { AccountSettings } from "~/blocks/settings/account-settings";
@@ -43,24 +43,22 @@ export async function action({ request }: Route.ActionArgs) {
       where: { id: authUser.id },
       data: { name, phone }
     });
-    return { ok: true, message: "Profile updated successfully." };
+    return { ok: true, intent: "update-profile", message: "Profile updated successfully." };
   } 
   
-if (intent === "update-preferences") {
-  const currency = formData.get("currency") as string;
-  const theme = formData.get("theme") as string;
+  if (intent === "update-preferences") {
+    const currency = formData.get("currency") as Currency;
+    const theme = formData.get("theme") as Theme;
 
-  await prisma.user.update({
-    where: { id: authUser.id },
-    // Force TypeScript to accept them by casting the database payload properties
-    data: { 
-      currency: currency as any, 
-      theme: theme as any 
-    }
-  });
+    await prisma.user.update({
+      where: { id: authUser.id },
+      data: { currency, theme }
+    });
 
-  return { ok: true, message: "Preferences updated successfully." };
-}
+    return { ok: true, intent: "update-preferences", message: "Preferences updated successfully." };
+  }
+  
+  // 🟢 REMOVED THE UNNECESSARY "update-notifications" INTENT ENTIRELY
   
   if (intent === "create-team") {
     const teamName = formData.get("teamName") as string;
@@ -73,7 +71,7 @@ if (intent === "update-preferences") {
         data: { teamId: team.id, role: "owner" }
       });
     });
-    return { ok: true, message: "Team created successfully." };
+    return { ok: true, intent: "create-team", message: "Team created successfully." };
   }
   
   if (intent === "change-password") {
@@ -81,20 +79,18 @@ if (intent === "update-preferences") {
     const password = formData.get("password") as string;
     const confirmPassword = formData.get("confirmPassword") as string;
 
-    // 1. Basic validation checks
     if (!currentPassword) {
-      return { ok: false, error: "Current password is required." };
+      return { ok: false, intent: "change-password", error: "Current password is required." };
     }
 
     if (!password || password.length < 8) {
-      return { ok: false, error: "Password must be at least 8 characters long." };
+      return { ok: false, intent: "change-password", error: "Password must be at least 8 characters long." };
     }
 
     if (password !== confirmPassword) {
-      return { ok: false, error: "Passwords do not match." };
+      return { ok: false, intent: "change-password", error: "Passwords do not match." };
     }
 
-    // 2. Verify current password by trying to re-authenticate the user
     const { error: signInError } = await supabase.auth.signInWithPassword({
       email: authUser.email!,
       password: currentPassword,
@@ -103,11 +99,11 @@ if (intent === "update-preferences") {
     if (signInError) {
       return {
         ok: false,
+        intent: "change-password",
         error: "The current password you entered is incorrect.",
       };
     }
 
-    // 3. If re-authentication succeeded, update to the new password
     const { error: updateError } = await supabase.auth.updateUser({
       password,
     });
@@ -115,12 +111,14 @@ if (intent === "update-preferences") {
     if (updateError) {
       return {
         ok: false,
+        intent: "change-password",
         error: updateError.message,
       };
     }
 
     return {
       ok: true,
+      intent: "change-password",
       message: "Password updated successfully.",
     };
   }
@@ -128,6 +126,7 @@ if (intent === "update-preferences") {
   return { ok: false, error: "Invalid intent" };
 }
 
+// FIXED: Re-added missing types and map definitions below
 type Section = "account" | "preferences" | "notifications" | "billing" | "team" | "security";
 
 const sectionMap: Record<Section, React.ComponentType<any>> = {

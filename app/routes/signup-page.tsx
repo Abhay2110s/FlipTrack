@@ -1,5 +1,4 @@
 import { redirect } from "react-router";
-import { createClient as createSupabaseAdminClient } from "@supabase/supabase-js";
 import type { Route } from "./+types/signup-page";
 import { getSupabaseServerClient } from "~/utils/supabase.server";
 import { PrismaClient } from "@prisma/client";
@@ -65,20 +64,10 @@ export async function action({ request }: Route.ActionArgs) {
       },
     });
   } catch (dbError) {
+    // FIXED: Let the error fail gracefully and removed admin cleanup block entirely
     console.error("Failed to create profile row after auth signup:", dbError);
-
-    try {
-      const adminClient = createSupabaseAdminClient(
-        process.env.SUPABASE_URL!,
-        process.env.SUPABASE_SERVICE_ROLE_KEY!
-      );
-      await adminClient.auth.admin.deleteUser(data.user.id);
-    } catch (cleanupError) {
-      console.error("Failed to clean up orphaned auth user:", cleanupError);
-    }
-
     return {
-      error: "Something went wrong creating your account. Please try again.",
+      error: "Something went wrong creating your account database profile. Please try again or contact support.",
     };
   }
 
