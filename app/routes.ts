@@ -30,8 +30,6 @@ export default [
     ]),
   ]),
 
-// ... (all your auth and layout routes stay exactly as they were above)
-
   route("/auth/login", "routes/login-page.tsx"),
   route("/auth/callback", "routes/auth.callback.tsx"),
   route("/auth/signup", "routes/signup-page.tsx"),
@@ -40,10 +38,16 @@ export default [
   route("/auth/logout", "routes/auth.logout.ts"),
   route("/api/cron/refresh-prices", "routes/api.cron.prices.ts"),
   route("/api/webhooks/stripe", "routes/api.stripe.ts"),
+  route("/api/webhooks/orders", "routes/api.webhooks.orders.ts"),
   route("/api/ai/price-insight", "routes/api.ai.insights.ts"),
+  route("/api/ai/ocr", "routes/api.ai.ocr.ts"),
   route("/api/insights", "routes/api.insights.ts"),
   route("/api/export/tax", "routes/api.export.tax.ts"),
   
-  // Your new dynamic showroom route at the very end
+  // 🌟 Kept from main branch merge (Placed safely above dynamic route)
+  route("/api/inventory/search", "routes/api.inventory.search.ts"),
+  route("/api/integrations", "routes/api.integrations.ts"),
+  
+  // 🌟 Your dynamic showroom route (Must stay at the very end as a catch-all)
   route("/:username", "routes/$username.tsx"),
 ] satisfies RouteConfig;
