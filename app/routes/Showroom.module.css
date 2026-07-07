@@ -1,55 +1,40 @@
 /* ==========================================================================
-   THEME VARIABLE CONFIGURATION (Respects Global Application Settings)
+   THEME CONFIGURATION (🌟 UPDATE 3: Using Project-Wide Global Variables)
    ========================================================================== */
 
-/* Default Settings: Midnight Professional Dark Mode Token Matrix */
+/* Default configuration maps to global dark environment tokens */
 .showroomContainer {
-  --bg-primary: #0c0e12;
-  --bg-surface: rgba(20, 24, 30, 0.4);
-  --bg-card: rgba(20, 24, 30, 0.3);
-  --bg-input: rgba(12, 14, 18, 0.6);
-  --border-subtle: rgba(255, 255, 255, 0.04);
-  --border-interactive: rgba(255, 255, 255, 0.06);
-  --text-main: #e2e8f0;
-  --text-muted: #94a3b8;
-  --text-heading: #f1f5f9;
-  --accent-color: #6366f1;
+  --bg-primary: var(--color-bg-canvas, #0c0e12);
+  --bg-surface: var(--color-bg-surface-translucent, rgba(20, 24, 30, 0.4));
+  --bg-card: var(--color-bg-card, rgba(20, 24, 30, 0.3));
+  --bg-input: var(--color-bg-field, rgba(12, 14, 18, 0.6));
+  --border-subtle: var(--color-border-subtle, rgba(255, 255, 255, 0.04));
+  --border-interactive: var(--color-border-interactive, rgba(255, 255, 255, 0.06));
+  --text-main: var(--color-text-body, #e2e8f0);
+  --text-muted: var(--color-text-muted, #94a3b8);
+  --text-heading: var(--color-text-heading, #f1f5f9);
+  --accent-color: var(--color-accent-primary, #6366f1);
 }
 
-/* Fallback Check 1: If application targets root via light className */
+/* Listening to your layout theme toggle actions via global modifiers */
 :global(.light) .showroomContainer,
 :global(html.light) .showroomContainer,
-:global(body.light) .showroomContainer {
-  --bg-primary: #f8fafc;
-  --bg-surface: rgba(241, 245, 249, 0.8);
-  --bg-card: #ffffff;
-  --bg-input: #ffffff;
-  --border-subtle: rgba(0, 0, 0, 0.05);
-  --border-interactive: rgba(0, 0, 0, 0.08);
-  --text-main: #334155;
-  --text-muted: #64748b;
-  --text-heading: #0f172a;
-  --accent-color: #4f46e5;
-}
-
-/* Fallback Check 2: If application targets root via data-theme selector attribute */
 :global([data-theme="light"]) .showroomContainer,
-:global(html[data-theme="light"]) .showroomContainer,
-:global(body[data-theme="light"]) .showroomContainer {
-  --bg-primary: #f8fafc;
-  --bg-surface: rgba(241, 245, 249, 0.8);
-  --bg-card: #ffffff;
-  --bg-input: #ffffff;
-  --border-subtle: rgba(0, 0, 0, 0.05);
-  --border-interactive: rgba(0, 0, 0, 0.08);
-  --text-main: #334155;
-  --text-muted: #64748b;
-  --text-heading: #0f172a;
-  --accent-color: #4f46e5;
+:global(html[data-theme="light"]) .showroomContainer {
+  --bg-primary: var(--color-bg-surface, #f8fafc);
+  --bg-surface: var(--color-bg-surface-muted, rgba(241, 245, 249, 0.8));
+  --bg-card: var(--color-bg-panel, #ffffff);
+  --bg-input: var(--color-bg-white, #ffffff);
+  --border-subtle: var(--color-border-light, rgba(0, 0, 0, 0.05));
+  --border-interactive: var(--color-border-base, rgba(0, 0, 0, 0.08));
+  --text-main: var(--color-text-dark, #334155);
+  --text-muted: var(--color-text-secondary, #64748b);
+  --text-heading: var(--color-text-main, #0f172a);
+  --accent-color: var(--color-accent-button, #4f46e5);
 }
 
 /* ==========================================================================
-   LAYOUT, CORE COMPONENT & TYPOGRAPHY STRUCTURE
+   LAYOUT STRUCTURE & INTERACTIVE CORE
    ========================================================================== */
 
 .showroomContainer {
@@ -58,7 +43,7 @@
   padding: 1.5rem;
   color: var(--text-main);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  transition: background-color 0.25s ease, color 0.25s ease;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .header {
@@ -104,7 +89,6 @@
   border-color: var(--accent-color);
 }
 
-/* Search and Filter System Wrapper Layout */
 .controlsBar {
   display: flex;
   gap: 1rem;
@@ -135,7 +119,6 @@
   border-color: var(--accent-color);
 }
 
-/* Showcase Dynamic Product Grid Matrix */
 .productGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -144,7 +127,6 @@
   margin: 0 auto;
 }
 
-/* Glassmorphic Professional Item Card Wrapper Layout */
 .itemCard {
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
